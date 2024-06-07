@@ -1,23 +1,27 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { StatusBar } from "expo-status-bar"
-import { useBroadcastStoreSelectors } from "@/store/broadcast"
-import BroadcastHeader from "@/components/broadcast/screen/view/header"
+import { View, Text, ImageBackground } from "react-native";
+import { useBroadcastStoreSelectors } from "@/store/broadcast";
+import BroadcastHeader from "@/components/broadcast/screen/view/header";
+import SubscriptionHandlerWrapper from "@/components/broadcast/screen/view/handlers/subscription";
+import BroadcastEditorWrapper from "@/components/broadcast/screen/view/editor";
+import BroadcastPostsHandler from "@/components/broadcast/screen/view/handlers/posts";
+import BroadcastPostsList from "@/components/broadcast/screen/view/posts/list";
 
 export default function BroadcastViewScreen() {
-  const {broadcast} = useBroadcastStoreSelectors()
+  const { broadcast } = useBroadcastStoreSelectors();
 
-  if (!broadcast) return (
-    <View>
-      <Text>No broadcast selected</Text>
-    </View>
-  )
-  return (
-    <View>
-      <BroadcastHeader broadcast={broadcast} />
+  if (!broadcast)
+    return (
       <View>
-        <Text>BroadcastViewScreen</Text>
+        <Text>No broadcast selected</Text>
       </View>
-    </View>
-  )
+    );
+  return (
+    <SubscriptionHandlerWrapper broadcastId={broadcast.id}>
+      <BroadcastHeader broadcast={broadcast} />
+      <BroadcastPostsHandler broadcastId={broadcast.id}>
+        <BroadcastPostsList broadcast={broadcast} />
+      </BroadcastPostsHandler>
+      <BroadcastEditorWrapper broadcast={broadcast} />
+    </SubscriptionHandlerWrapper>
+  );
 }

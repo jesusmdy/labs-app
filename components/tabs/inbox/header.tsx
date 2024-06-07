@@ -1,44 +1,42 @@
-import { View, StyleSheet } from 'react-native'
-import React, { Fragment } from 'react'
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import useBorderColor from "@/hooks/useBorderColor"
-import { Divider, Text } from "react-native-paper"
-import StartConversationButton from "@/components/conversation/new/start"
-import useMD3Theme from "@/hooks/useMD3Theme"
-import useColors from "@/hooks/useColors"
+import { View, StyleSheet } from "react-native";
+import React, { Fragment } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Text } from "react-native-paper";
+import { sizes } from "@/utils/spacing";
+import useBorderColor from "@/hooks/useBorderColor";
+import StartConversationButton from "@/components/conversation/new/start";
 
 export default function InboxHeader() {
-  const insets = useSafeAreaInsets()
-  const theme = useMD3Theme()
+  const insets = useSafeAreaInsets();
+  const borderColor = useBorderColor();
+  const wrapperStyles = {
+    ...styles.headerWrapper,
+    paddingTop: insets.top,
+    borderBottomWidth: 1,
+    borderColor,
+  };
 
   return (
     <Fragment>
-
-      <View style={{
-        ...styles.header,
-        paddingTop: insets.top + 8,
-        backgroundColor: theme.colors.background
-      }}>
-        <View
-          style={{
-            flex: 1,
-          }}
-        >
-          <Text variant="titleMedium" style={{ flex: 1, color: theme.colors.outline }}>Conversations</Text>
+      <View style={wrapperStyles}>
+        <View style={styles.header}>
+          <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+            Conversations
+          </Text>
+          <StartConversationButton />
         </View>
-        <StartConversationButton />
       </View>
-      <Divider />
     </Fragment>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
+  headerWrapper: {},
   header: {
-    paddingHorizontal: 16,
-    paddingBottom: 8,
+    height: sizes.defaultToolbar,
     flexDirection: "row",
     alignItems: "center",
-    position: "relative"
-  }
-})
+    justifyContent: "space-between",
+    marginHorizontal: sizes.defaultPadding,
+  },
+});

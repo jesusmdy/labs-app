@@ -4,5 +4,7 @@ export const KNOWN_COLLECTIONS = {
   inbox: "/api/services/inbox",
   broadcast: "broadcasts",
   broadcastItem: "broadcastItems",
-  broadcastSubscription: "broadcastSubscription"
-}
+  broadcastSubscription: "broadcastSubscription",
+  media: "media",
+  users: "users",
+};

@@ -1,8 +1,6 @@
-import useBroadcastHeaderOptions from "@/hooks/headers/useBroadcastHeader";
 import { Stack } from "expo-router";
 
 export default function BroadcastLayout() {
-  const broadcastViewHeaderOptions = useBroadcastHeaderOptions()
   return (
     <Stack>
       <Stack.Screen
@@ -14,7 +12,7 @@ export default function BroadcastLayout() {
       <Stack.Screen
         name="view"
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
     </Stack>

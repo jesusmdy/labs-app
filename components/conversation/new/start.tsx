@@ -1,23 +1,9 @@
-import { IconButton } from "react-native-paper"
-import { Ionicons } from "@expo/vector-icons"
-import { Link } from "expo-router"
-import { KNOWN_ROUTES } from "@/utils/routes"
+import { Link, useRouter } from "expo-router";
+import { KNOWN_ROUTES } from "@/utils/routes";
+import { Button } from "react-native-ui-lib";
 
 export default function StartConversationButton() {
-  return (
-    <Link href={KNOWN_ROUTES.conversation.new.direct}>
-      <IconButton
-        mode="contained"
-        size={16}
-        style={{ margin: 0 }}
-        icon={({size, color}) => (
-          <Ionicons
-            size={size + 4}
-            color={color}
-            name="add"
-          />
-        )}
-      />
-    </Link>
-  )
+  const router = useRouter();
+  const onPress = () => router.push(KNOWN_ROUTES.conversation.new.direct);
+  return <Button label="Create" size="small" link onPress={onPress} />;
 }

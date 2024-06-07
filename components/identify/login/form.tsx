@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
 import { View } from '@/components/Themed';
-import { Button, Snackbar, Text, TextInput } from "react-native-paper";
+import { Snackbar, Text } from "react-native-paper";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,6 +9,11 @@ import { authWithPassword } from "@/utils/queries/user";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { KNOWN_ROUTES } from "@/utils/routes";
+import useBorderColor from "@/hooks/useBorderColor";
+import useMD3Theme from "@/hooks/useMD3Theme";
+import { Button } from "react-native-ui-lib";
+import { CircleDashed } from "lucide-react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const formSchema = z.object({
   emailOrUsername: z.string().email(),
@@ -20,12 +25,11 @@ type TFormSchemeType = z.infer<typeof formSchema>
 export default function LoginForm() {
   const [showError, setShowError] = useState(false)
   const router = useRouter()
+  const borderColor = useBorderColor()
+  const theme = useMD3Theme()
+
   const form = useForm<TFormSchemeType>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      emailOrUsername: "",
-      password: ""
-    }
   })
 
   const onSubmit = (values: TFormSchemeType) => {
@@ -44,10 +48,35 @@ export default function LoginForm() {
     
   }
 
+  const inputStyle = {
+    ...styles.input,
+    borderColor,
+    color: theme.colors.outline
+  }
+
   return (
     <FormProvider {...form}>
       <View style={styles.box}>
-        <Text style={styles.title}>Sign In</Text>
+        <View style={styles.icon}>
+          <CircleDashed size={170} color={theme.colors.primaryContainer} />
+          <Ionicons
+            name={
+              form.formState.isValid
+                ? "chatbubble"
+                : "chatbubble-outline"
+            }
+            color={
+              form.formState.isValid
+                ? theme.colors.primary
+                : theme.colors.primaryContainer
+            }
+            size={90}
+            style={styles.innerIcon}
+          />
+        </View>
+        <Text variant="headlineSmall">
+          Continue with your account
+        </Text>
         <View style={styles.fields}>
           <Controller
             control={form.control}
@@ -56,12 +85,15 @@ export default function LoginForm() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                mode="outlined"
-                dense
                 placeholder="Your email"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                style={inputStyle}
+                placeholderTextColor={theme.colors.outline}
               />
             )}
             name="emailOrUsername"
@@ -73,26 +105,28 @@ export default function LoginForm() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                mode="outlined"
-                dense
                 placeholder="Your password"
                 onBlur={onBlur}
                 onChangeText={onChange}
+                autoComplete="password"
                 value={value}
-                keyboardType="visible-password"
+                secureTextEntry
+                autoCapitalize="none"
+                autoCorrect={false}
+                style={inputStyle}
+                placeholderTextColor={theme.colors.outline}
               />
             )}
             name="password"
           />
         </View>
-        <View style={styles.actions}>
+        <View style={{ marginTop: 16 }}>
           <Button
-            mode="outlined"
             onPress={form.handleSubmit(onSubmit)}
             disabled={!form.formState.isValid}
-          >
-            Continue
-          </Button>
+            label="Continue"
+            borderRadius={8}
+          />
         </View>
       </View>
       <Snackbar
@@ -112,10 +146,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   box: {
     width: "90%",
     margin: "auto",
@@ -124,8 +154,20 @@ const styles = StyleSheet.create({
   fields: {
     gap: 8
   },
-  actions: {
+  input: {
+    borderWidth: 2,
+    padding: 16,
+    borderRadius: 8,
+  },
+  icon: {
     flexDirection: "row",
-    justifyContent: "flex-end"
+    justifyContent: "center",
+    marginBottom: 32,
+    alignContent: "center",
+    position: "relative"
+  },
+  innerIcon: {
+    position: "absolute",
+    top: 38
   }
 });

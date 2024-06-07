@@ -1,20 +1,17 @@
-import React, { Fragment } from 'react';
-import { Tabs } from 'expo-router';
+import { Tabs } from "expo-router";
 
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Button, MD3Colors } from "react-native-paper";
-import StartConversationButton from "@/components/conversation/new/start";
-import RealtimeMessagesListener from "@/components/conversation/realtime/messages";
-import { RssIcon } from "lucide-react-native";
+import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { Ionicons } from "@expo/vector-icons";
+import useMD3Theme from "@/hooks/useMD3Theme";
+import { Fragment } from "react";
 
 export default function TabLayout() {
+  const theme = useMD3Theme();
   return (
-    <RealtimeMessagesListener>
-
+    <Fragment>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: MD3Colors.primary50,
+          tabBarActiveTintColor: theme.colors.primary,
           headerShown: useClientOnlyValue(false, true),
         }}
       >
@@ -25,11 +22,7 @@ export default function TabLayout() {
             title: "Inbox",
             tabBarIcon: ({ color, focused, size }) => (
               <Ionicons
-                name={
-                  focused
-                    ? "chatbubbles"
-                    : "chatbubbles-outline"
-                }
+                name={focused ? "chatbubbles" : "chatbubbles-outline"}
                 color={color}
                 size={size}
               />
@@ -37,13 +30,13 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="broadcast/index"
+          name="broadcast"
           options={{
-            title: 'Broadcasts',
+            title: "Community",
             headerShown: false,
             tabBarIcon: ({ color, focused, size }) => (
-              <MaterialCommunityIcons
-                name="broadcast"
+              <Ionicons
+                name={focused ? "people" : "people-outline"}
                 size={size}
                 color={color}
               />
@@ -53,14 +46,10 @@ export default function TabLayout() {
         <Tabs.Screen
           name="settings/index"
           options={{
-            title: 'Settings',
+            title: "Settings",
             tabBarIcon: ({ color, focused, size }) => (
               <Ionicons
-                name={
-                  focused
-                    ? "cog"
-                    : "cog-outline"
-                }
+                name={focused ? "cog" : "cog-outline"}
                 color={color}
                 size={size}
               />
@@ -68,6 +57,6 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-    </RealtimeMessagesListener>
+    </Fragment>
   );
 }

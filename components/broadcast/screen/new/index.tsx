@@ -20,48 +20,47 @@ import { useToggle } from "@uidotdev/usehooks";
 const formSchema = z.object({
   title: z.string().min(1).max(50),
   description: z.string().optional(),
-  icon: z.any().optional()
-})
+  icon: z.any().optional(),
+});
 
-export type formType = z.infer<typeof formSchema>
+export type formType = z.infer<typeof formSchema>;
 
 export default function NewBroadcastForm() {
-  const [loading, toggleLoading] = useToggle()
-  const { setBroadcast } = useBroadcastStoreSelectors()
-  const insets = useSafeAreaInsets()
-  const borderColor = useBorderColor()
-  const router = useRouter()
+  const [loading, toggleLoading] = useToggle();
+  const { setBroadcast } = useBroadcastStoreSelectors();
+  const insets = useSafeAreaInsets();
+  const borderColor = useBorderColor();
+  const router = useRouter();
 
   const methods = useForm<formType>({
-    resolver: zodResolver(formSchema)
-  })
+    resolver: zodResolver(formSchema),
+  });
 
   async function onSubmit(values: formType) {
     try {
-      toggleLoading()
+      toggleLoading();
       let createdIcon;
       if (values.icon) {
-        createdIcon = await createMedia(values.icon)
+        createdIcon = await createMedia(values.icon);
       }
       const createdBroadcast = await createBroadcast({
         title: values.title,
         description: values.description || "",
-        icon: createdIcon ? createdIcon.id : ""
-      })
-      setBroadcast(createdBroadcast)
-      router.replace(KNOWN_ROUTES.broadcast.view)
+        icon: createdIcon ? createdIcon.id : "",
+      });
+      setBroadcast(createdBroadcast);
+      router.replace(KNOWN_ROUTES.broadcast.view);
     } catch (err) {
-      console.log(err)
-      alert("Can not create this broadcast. Try again")
+      console.log(err);
+      alert("Can not create this broadcast. Try again");
     } finally {
-      toggleLoading()
+      toggleLoading();
     }
-
   }
 
   return (
     <FormProvider {...methods}>
-      <View style={{...styles.wrapper, marginBottom: insets.bottom}}>
+      <View style={{ ...styles.wrapper, marginBottom: insets.bottom }}>
         <View style={styles.content}>
           <View style={styles.infoFields}>
             <IconField />
@@ -71,17 +70,17 @@ export default function NewBroadcastForm() {
           </View>
           <View
             style={{
-              paddingHorizontal: sizes.defaultPadding
+              paddingHorizontal: sizes.defaultPadding,
             }}
           >
             <DescriptionField />
           </View>
         </View>
-        <View style={{...styles.footer, borderColor}}>
+        <View style={{ ...styles.footer, borderColor }}>
           <Button
             link
             label="Cancel"
-            onPress={() => router.push(KNOWN_ROUTES.tabs.broadcast)}
+            onPress={() => router.back()}
             disabled={loading}
           />
           <Button
@@ -94,7 +93,7 @@ export default function NewBroadcastForm() {
         </View>
       </View>
     </FormProvider>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: sizes.defaultPadding,
     borderTopWidth: 1,
     height: sizes.defaultToolbar,
-    alignItems: "center"
+    alignItems: "center",
   },
   infoFields: {
     padding: sizes.defaultPadding,
@@ -119,4 +118,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
-})
+});

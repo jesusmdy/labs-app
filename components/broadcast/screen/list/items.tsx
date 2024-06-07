@@ -1,27 +1,24 @@
-import { useBroadcastStoreSelectors } from "@/store/broadcast"
-import { View, Text, FlatList } from "react-native"
-import BroadcastItem from "./item"
+import { useBroadcastStoreSelectors } from "@/store/broadcast";
+import { FlatList } from "react-native";
+import BroadcastItem from "./item";
+import BroadcastHeader from "../header";
+import EmptyBroadcastList from "./empty";
+import { sizes } from "@/utils/spacing";
 
 export default function BroadcastList() {
-  const {broadcastList} = useBroadcastStoreSelectors()
+  const { broadcastList } = useBroadcastStoreSelectors();
 
-  if (broadcastList.length === 0) {
-    return (
-      <View>
-        <Text>You are not following any broadcast.</Text>
-        <Text>Follow some broadcasts to see them here.</Text>
-        <Text>Or create your own broadcast</Text>
-      </View>
-    )
-  }
   return (
     <FlatList
       data={broadcastList}
-      renderItem={
-        ({item}) => <BroadcastItem broadcast={item} />
-      }
+      renderItem={({ item }) => <BroadcastItem broadcast={item} />}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={BroadcastHeader}
+      ListEmptyComponent={<EmptyBroadcastList />}
+      contentContainerStyle={{ gap: sizes.defaultSizes.small }}
+      stickyHeaderIndices={[0]}
       scrollEnabled
-      keyExtractor={item => item.id}
+      bounces={false}
     />
-  )
+  );
 }

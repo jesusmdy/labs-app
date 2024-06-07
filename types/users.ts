@@ -1,11 +1,11 @@
-export type TUser = {
+import { ICollection } from "./collection";
+
+interface IUser extends ICollection {
   avatar: string;
-  collectionId: string;
-  collectionName: string;
   id: string;
   name: string;
   username: string;
-  updated: string;
-  created: string;
   virified: boolean;
 }
+
+export type TUser = IUser;

@@ -3,31 +3,30 @@ import { useBatchAddMessages } from "@/store/messages";
 import { TChat } from "@/types/chats";
 import { TMessage } from "@/types/messages";
 import { KNOWN_COLLECTIONS } from "@/utils/collections";
+import { parseReceivedMessages } from "@/utils/message";
 import { PropsWithChildren, useEffect } from "react";
 import useSWR from "swr";
 
 interface IChatMessagesHandler extends PropsWithChildren {
-  chat: TChat
+  chat: TChat;
 }
 
-export function ChatMessagesHandler({children, chat}: IChatMessagesHandler) {
-  const batchAddMessages = useBatchAddMessages()
+export function ChatMessagesHandler({ children, chat }: IChatMessagesHandler) {
+  const batchAddMessages = useBatchAddMessages();
 
-  const {data} = useSWR(`api/inbox/${chat.id}/messages`, () => pb.collection(KNOWN_COLLECTIONS.messages).getList(1, 19, {
+  const { data } = useSWR(`api/inbox/${chat.id}/messages`, () =>
+    pb.collection(KNOWN_COLLECTIONS.messages).getList(1, 19, {
       filter: `origin="${chat.id}"`,
-      sort: "-created",
-      expand: "media, sender"
-    })
-  )
+      sort: "created",
+      expand: "media, sender",
+    }),
+  );
 
-  useEffect(
-    () => {
-      if (data) {
-        batchAddMessages(data.items as TMessage[])
-      }
-    },
-    [data]
-  )
+  useEffect(() => {
+    if (data) {
+      batchAddMessages(parseReceivedMessages(data.items as TMessage[]));
+    }
+  }, [data]);
 
-  return children
+  return children;
 }

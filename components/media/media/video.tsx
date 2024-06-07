@@ -1,20 +1,21 @@
-import { View, StyleSheet } from "react-native"
-import React, { useEffect, useRef, useState } from "react"
-import { getMediaUrl } from "@/utils/queries/media"
-import { useVideoPlayer, VideoView } from "expo-video"
-import { Ionicons } from "@expo/vector-icons"
-import { Card } from "react-native-paper"
-import { IMediaItemProps } from ".."
-import { useMediaProviderContext } from "../provider"
+import { View, StyleSheet } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { getMediaUrl } from "@/utils/queries/media";
+import { useVideoPlayer, VideoView } from "expo-video";
+import { Ionicons } from "@expo/vector-icons";
+import { Card } from "react-native-paper";
+import { IMediaItemProps } from "..";
+import { useMediaProviderContext } from "../provider";
+import { sizes } from "@/utils/spacing";
 
 export default function MediaItemVideo(props: IMediaItemProps) {
-  const source = getMediaUrl(props.media)
+  const source = getMediaUrl(props.media);
   const ref = useRef<VideoView>(null);
 
   const player = useVideoPlayer(source, (player) => {
     player.loop = true;
     player.currentTime = props.asPreview ? 1 : 0;
-    !props.asPreview && player.play()
+    !props.asPreview && player.play();
   });
 
   return (
@@ -22,13 +23,11 @@ export default function MediaItemVideo(props: IMediaItemProps) {
       style={{
         ...styles.contentContainer,
         width: props.width,
-        height: props.height
+        height: props.height,
       }}
     >
       <VideoView
-        {
-          ...props.videoProps
-        }
+        {...props.videoProps}
         ref={ref}
         style={{
           ...styles.video,
@@ -39,47 +38,41 @@ export default function MediaItemVideo(props: IMediaItemProps) {
         nativeControls={!props.asPreview}
         contentFit="cover"
       />
-      {
-        props.asPreview && (
-          <Card
-            style={styles.startOverlay}
-            mode="contained"
-          >
-            <Card.Content>
-              <Ionicons
-                name="play"
-                size={64}
-                color="#fff"
-              />
-            </Card.Content>
-          </Card>
-        )
-      }
+      {props.asPreview && (
+        <Card style={styles.startOverlay} mode="contained">
+          <Card.Content>
+            <Ionicons name="play" size={64} color="#fff" />
+          </Card.Content>
+        </Card>
+      )}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   contentContainer: {
-    borderRadius: 8,
-    position: "relative"
+    borderRadius: sizes.defaultBorderRadiuses.medium,
+    position: "relative",
   },
   video: {
-    borderRadius: 8,
+    borderRadius: sizes.defaultBorderRadiuses.medium,
     backgroundColor: "#000",
-    resizeMode: "stretch"
+    resizeMode: "stretch",
   },
   controlsContainer: {
     padding: 10,
   },
   startOverlay: {
     backgroundColor: "rgba(25,25,25,0.20)",
-    borderRadius: 8,
+    borderRadius: sizes.defaultBorderRadiuses.medium,
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    left: 0, right: 0,
-    top: 0, bottom: 0,
-    width: "100%", height: "100%"
-  }
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: "100%",
+    height: "100%",
+  },
 });

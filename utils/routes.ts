@@ -1,10 +1,10 @@
 export const KNOWN_ROUTES = {
   identify: {
-    login: "/(identify)/login"
+    login: "/(identify)/login",
   },
   tabs: {
     inbox: "/(tabs)/inbox",
-    broadcast: "/(tabs)/broadcast"
+    broadcast: "/(tabs)/broadcast",
   },
   conversation: {
     chat: "/(conversation)/chat",
@@ -12,10 +12,11 @@ export const KNOWN_ROUTES = {
       direct: "/(conversation)/new/direct",
       group: "/(conversation)/new/group",
     },
-    media: "/(conversation)/media"
+    media: "/(conversation)/media",
   },
   broadcast: {
-    new: "/(broadcast)/new",
-    view: "/(broadcast)/view"
-  }
-}
+    new: "/(tabs)/broadcast/create",
+    newModal: "/(tabs)/broadcast/new",
+    view: "/(broadcast)/view",
+  },
+};
