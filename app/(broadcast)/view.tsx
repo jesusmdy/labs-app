@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground } from "react-native";
+import { View, Text } from "react-native";
 import { useBroadcastStoreSelectors } from "@/store/broadcast";
 import BroadcastHeader from "@/components/broadcast/screen/view/header";
 import SubscriptionHandlerWrapper from "@/components/broadcast/screen/view/handlers/subscription";

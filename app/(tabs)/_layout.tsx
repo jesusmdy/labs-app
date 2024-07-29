@@ -16,20 +16,6 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen
-          name="inbox/index"
-          options={{
-            headerShown: false,
-            title: "Inbox",
-            tabBarIcon: ({ color, focused, size }) => (
-              <Ionicons
-                name={focused ? "chatbubbles" : "chatbubbles-outline"}
-                color={color}
-                size={size}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="broadcast"
           options={{
             title: "Community",
@@ -43,6 +29,21 @@ export default function TabLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="inbox/index"
+          options={{
+            headerShown: false,
+            title: "Inbox",
+            tabBarIcon: ({ color, focused, size }) => (
+              <Ionicons
+                name={focused ? "chatbubbles" : "chatbubbles-outline"}
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+
         <Tabs.Screen
           name="settings/index"
           options={{

@@ -1,18 +1,64 @@
 import { View, StyleSheet, useColorScheme } from "react-native";
-import React from "react";
+import React, { Fragment, useMemo } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import _ from "lodash";
-import { Button } from "react-native-ui-lib";
+import { ActionSheet, Button } from "react-native-ui-lib";
 import { useRouter } from "expo-router";
 import { KNOWN_ROUTES } from "@/utils/routes";
 import { Text } from "react-native-paper";
 import { sizes } from "@/utils/spacing";
 import { BlurView } from "@react-native-community/blur";
 import { BLUR_AMMOUNT } from "@/utils/blur";
-import BroadcastTabs from "./tabs";
-import WriteBroadcastButton from "./new/write";
+import { useToggle } from "@uidotdev/usehooks";
+import { TouchableOpacity } from "react-native-ui-lib/src/incubator";
+import { Ionicons } from "@expo/vector-icons";
+import { broadcastFilterTabs } from "@/utils/broadcast";
+import useBroadcastStore, { IBroadcastFilter } from "@/store/broadcast";
+import SearchButton from "./search";
 
-export const TOOLBAR_HEIGHT = 50;
+function FilterSelector() {
+  const [open, toggleOpen] = useToggle();
+  const { setBroadcastFilter, broadcastFilter } = useBroadcastStore();
+  const insets = useSafeAreaInsets();
+
+  const options = broadcastFilterTabs.map(({ label, value }) => ({
+    label,
+    onPress: () => setBroadcastFilter(value as IBroadcastFilter),
+  }));
+
+  const currentOption = useMemo(
+    () => _.find(broadcastFilterTabs, { value: broadcastFilter }),
+    [broadcastFilter],
+  );
+
+  return (
+    <Fragment>
+      <TouchableOpacity
+        onPress={toggleOpen}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: sizes.defaultSizes.small / 2,
+        }}
+      >
+        <Text
+          variant="bodyLarge"
+          style={{ fontWeight: "bold", textTransform: "capitalize" }}
+        >
+          {currentOption?.label}
+        </Text>
+        <Ionicons name="chevron-down" size={sizes.defaultSizes.medium} />
+      </TouchableOpacity>
+      <ActionSheet
+        visible={open}
+        onDismiss={() => toggleOpen(false)}
+        showCancelButton
+        options={options}
+        dialogStyle={{ paddingBottom: insets.bottom }}
+      />
+    </Fragment>
+  );
+}
 
 export default function BroadcastHeader() {
   const { top } = useSafeAreaInsets();
@@ -28,21 +74,18 @@ export default function BroadcastHeader() {
         }}
       >
         <View style={styles.content}>
-          <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-            Community
-          </Text>
+          <FilterSelector />
           <View style={{ flexDirection: "row", gap: sizes.defaultSizes.small }}>
+            <SearchButton />
             <Button
               label="Create"
               size="small"
               link
               onPress={() => router.push(KNOWN_ROUTES.broadcast.new)}
             />
-            <WriteBroadcastButton />
           </View>
         </View>
       </View>
-      <BroadcastTabs />
     </BlurView>
   );
 }

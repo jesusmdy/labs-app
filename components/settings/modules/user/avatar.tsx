@@ -46,7 +46,6 @@ export default function AvatarModule() {
   const [open, toggleOpen] = useToggle();
   const { user } = useAuth();
   const { setUser } = useUserStore();
-  const theme = useMD3Theme();
 
   async function updateProfilePicture(media?: IAssetResult) {
     try {

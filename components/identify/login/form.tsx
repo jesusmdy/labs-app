@@ -1,6 +1,6 @@
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput } from "react-native";
 
-import { View } from '@/components/Themed';
+import { View } from "@/components/Themed";
 import { Snackbar, Text } from "react-native-paper";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,42 +17,38 @@ import { Ionicons } from "@expo/vector-icons";
 
 const formSchema = z.object({
   emailOrUsername: z.string().email(),
-  password: z.string().min(8)
-})
+  password: z.string().min(8),
+});
 
-type TFormSchemeType = z.infer<typeof formSchema>
+type TFormSchemeType = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
-  const [showError, setShowError] = useState(false)
-  const router = useRouter()
-  const borderColor = useBorderColor()
-  const theme = useMD3Theme()
+  const [showError, setShowError] = useState(false);
+  const router = useRouter();
+  const borderColor = useBorderColor();
+  const theme = useMD3Theme();
 
   const form = useForm<TFormSchemeType>({
     resolver: zodResolver(formSchema),
-  })
+  });
 
   const onSubmit = (values: TFormSchemeType) => {
     authWithPassword(values)
-    .then(res => {
-      router.replace(KNOWN_ROUTES.tabs.inbox)
-    })
-    .catch(e => {
-      console.log(e)
-      setShowError(true)
-      setTimeout(
-        () => setShowError(false),
-        2000
-      )
-    })
-    
-  }
+      .then((res) => {
+        router.replace(KNOWN_ROUTES.tabs.broadcast);
+      })
+      .catch((e) => {
+        console.log(e);
+        setShowError(true);
+        setTimeout(() => setShowError(false), 2000);
+      });
+  };
 
   const inputStyle = {
     ...styles.input,
     borderColor,
-    color: theme.colors.outline
-  }
+    color: theme.colors.outline,
+  };
 
   return (
     <FormProvider {...form}>
@@ -60,11 +56,7 @@ export default function LoginForm() {
         <View style={styles.icon}>
           <CircleDashed size={170} color={theme.colors.primaryContainer} />
           <Ionicons
-            name={
-              form.formState.isValid
-                ? "chatbubble"
-                : "chatbubble-outline"
-            }
+            name={form.formState.isValid ? "chatbubble" : "chatbubble-outline"}
             color={
               form.formState.isValid
                 ? theme.colors.primary
@@ -74,9 +66,7 @@ export default function LoginForm() {
             style={styles.innerIcon}
           />
         </View>
-        <Text variant="headlineSmall">
-          Continue with your account
-        </Text>
+        <Text variant="headlineSmall">Continue with your account</Text>
         <View style={styles.fields}>
           <Controller
             control={form.control}
@@ -129,30 +119,26 @@ export default function LoginForm() {
           />
         </View>
       </View>
-      <Snackbar
-        visible={showError}
-        onDismiss={() => setShowError(false)}
-      >
+      <Snackbar visible={showError} onDismiss={() => setShowError(false)}>
         <Text>There was an error in your request</Text>
       </Snackbar>
     </FormProvider>
-  )
+  );
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   box: {
     width: "90%",
     margin: "auto",
-    gap: 16
+    gap: 16,
   },
   fields: {
-    gap: 8
+    gap: 8,
   },
   input: {
     borderWidth: 2,
@@ -164,10 +150,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 32,
     alignContent: "center",
-    position: "relative"
+    position: "relative",
   },
   innerIcon: {
     position: "absolute",
-    top: 38
-  }
+    top: 38,
+  },
 });

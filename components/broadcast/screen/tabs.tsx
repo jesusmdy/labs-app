@@ -2,7 +2,8 @@ import useMD3Theme from "@/hooks/useMD3Theme";
 import useBroadcastStore, { IBroadcastFilter } from "@/store/broadcast";
 import { broadcastFilterTabs } from "@/utils/broadcast";
 import { sizes } from "@/utils/spacing";
-import { useMemo } from "react";
+import _ from "lodash";
+import { Fragment, useMemo } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
 
@@ -20,27 +21,25 @@ function Tab({ tab }: { tab: ITab }) {
   );
   const onPress = () => setBroadcastFilter(tab.value as IBroadcastFilter);
   return (
-    <View>
-      <TouchableOpacity
-        onPress={onPress}
-        style={{
-          marginRight: sizes.defaultSizes.small / 2,
-        }}
-      >
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
+      <TouchableOpacity onPress={onPress}>
         <Text
           variant="labelLarge"
-          style={
-            {
-              paddingVertical: sizes.defaultSizes.small,
-              color: isEnabled ? theme.colors.primary : theme.colors.outline,
-            } as never
-          }
+          style={{
+            paddingVertical: sizes.defaultSizes.small,
+            color: isEnabled ? theme.colors.primary : theme.colors.outline,
+            textAlign: "center",
+          }}
         >
           {tab.label}
         </Text>
         <View
           style={{
-            height: 3,
+            height: sizes.defaultSizes.small / 2,
             backgroundColor: isEnabled ? theme.colors.primary : "transparent",
             borderTopEndRadius: 2,
             borderTopStartRadius: 2,
@@ -54,15 +53,9 @@ function Tab({ tab }: { tab: ITab }) {
 export default function BroadcastTabs() {
   return (
     <View style={styles.wrapper}>
-      <FlatList
-        data={broadcastFilterTabs}
-        renderItem={({ item }) => <Tab tab={item} />}
-        keyExtractor={(i) => i.value}
-        contentContainerStyle={{
-          gap: sizes.defaultSizes.small,
-        }}
-        horizontal
-      />
+      {_.map(broadcastFilterTabs, (tab, index) => (
+        <Tab tab={tab} key={index} />
+      ))}
     </View>
   );
 }
@@ -72,5 +65,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: sizes.defaultPadding,
     paddingVertical: sizes.defaultPadding / 2,
     paddingBottom: 0,
+    flexDirection: "row",
+    gap: sizes.defaultSizes.small,
   },
 });

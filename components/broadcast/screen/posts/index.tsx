@@ -9,7 +9,7 @@ import BroadcastHeader from "../header";
 import EmptyBroadcastList from "../list/empty";
 
 export default function BroadcastPostsByFilter() {
-  const { broadcastFilter, posts, broadcastList } = useBroadcastStore();
+  const { broadcastFilter, posts } = useBroadcastStore();
   const { user } = useAuth();
 
   const filters = {
@@ -21,8 +21,7 @@ export default function BroadcastPostsByFilter() {
 
   const filteredPosts = useMemo(() => {
     return _.filter(posts, filters[broadcastFilter as never]);
-  }, [broadcastFilter]);
-
+  }, [broadcastFilter, posts]);
   return (
     <FlatList
       data={filteredPosts}
@@ -32,7 +31,6 @@ export default function BroadcastPostsByFilter() {
       ListHeaderComponent={BroadcastHeader}
       stickyHeaderIndices={[0]}
       keyExtractor={(item) => item.id}
-      contentContainerStyle={{ flex: 1 }}
       ListEmptyComponent={<EmptyBroadcastList />}
       scrollEnabled
       bounces={false}
